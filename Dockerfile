@@ -46,8 +46,8 @@ COPY zkGenConfig.sh zkOk.sh zkMetrics.sh /opt/zookeeper/bin/
 # Create a user for the zookeeper process and configure file system ownership
 # for necessary directories and symlink the distribution as a user executable
 RUN set -x \
-    && ls -l /opt/zookeeper/bin/ \
     && chmod +x /opt/zookeeper/bin/*.sh \
+    && ls -l /opt/zookeeper/bin/ \
     && mkdir -p $ZK_DATA_DIR $ZK_DATA_LOG_DIR $ZK_LOG_DIR /usr/share/zookeeper /tmp/zookeeper /usr/etc/ \
     && chown -R "$ZK_USER:$ZK_USER" /opt/$ZK_DIST $ZK_DATA_DIR $ZK_LOG_DIR $ZK_DATA_LOG_DIR /tmp/zookeeper \
     && ln -s /opt/zookeeper/conf/ /usr/etc/zookeeper \
