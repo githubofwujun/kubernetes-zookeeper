@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 
-ENV ZK_DATA_DIR=/var/lib/zookeeper/data \
+ENV ZK_USER=root \
+    ZK_DATA_DIR=/var/lib/zookeeper/data \
     ZK_DATA_LOG_DIR=/var/lib/zookeeper/log \
     ZK_LOG_DIR=/var/log/zookeeper \
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -45,9 +46,10 @@ COPY zkGenConfig.sh zkOk.sh zkMetrics.sh /opt/zookeeper/bin/
 # Create a user for the zookeeper process and configure file system ownership
 # for necessary directories and symlink the distribution as a user executable
 RUN set -x \
-    &&  ls -l /opt/zookeeper/bin/ \
-    &&  chmod +x /opt/zookeeper/bin/ \
-    &&  mkdir -p $ZK_DATA_DIR $ZK_DATA_LOG_DIR $ZK_LOG_DIR /usr/share/zookeeper /tmp/zookeeper /usr/etc/ \
+    && ls -l /opt/zookeeper/bin/ \
+    && chmod +x /opt/zookeeper/bin/*.sh \
+    && mkdir -p $ZK_DATA_DIR $ZK_DATA_LOG_DIR $ZK_LOG_DIR /usr/share/zookeeper /tmp/zookeeper /usr/etc/ \
+    && chown -R "$ZK_USER:$ZK_USER" /opt/$ZK_DIST $ZK_DATA_DIR $ZK_LOG_DIR $ZK_DATA_LOG_DIR /tmp/zookeeper \
     && ln -s /opt/zookeeper/conf/ /usr/etc/zookeeper \
     && ln -s /opt/zookeeper/bin/* /usr/bin \
     && ln -s /opt/zookeeper/$ZK_DIST.jar /usr/share/zookeeper/ \
