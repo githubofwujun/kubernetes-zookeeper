@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ZK_USER=${ZK_USER:-"zookeeper"}
+ZK_USER=${ZK_USER:-"root"}
 ZK_LOG_LEVEL=${ZK_LOG_LEVEL:-"INFO"}
 ZK_DATA_DIR=${ZK_DATA_DIR:-"/var/lib/zookeeper/data"}
 ZK_DATA_LOG_DIR=${ZK_DATA_LOG_DIR:-"/var/lib/zookeeper/log"}
@@ -37,6 +37,9 @@ LOGGER_PROPS_FILE="$ZK_CONF_DIR/log4j.properties"
 JAVA_ENV_FILE="$ZK_CONF_DIR/java.env"
 HOST=`hostname -s`
 DOMAIN=`hostname -d`
+
+chmod -R 777 $ZK_CONF_DIR /opt/zookeeper/conf var/log/zookeeper
+
 
 function print_servers() {
     for (( i=1; i<=$ZK_REPLICAS; i++ ))
@@ -113,16 +116,19 @@ function create_data_dirs() {
 
     if [ ! -d $ZK_DATA_DIR  ]; then
         mkdir -p $ZK_DATA_DIR
+        chmod -R 777 $ZK_DATA_DIR
         chown -R $ZK_USER:$ZK_USER $ZK_DATA_DIR
     fi
 
     if [ ! -d $ZK_DATA_LOG_DIR  ]; then
         mkdir -p $ZK_DATA_LOG_DIR
+        chmod -R 777 $ZK_DATA_LOG_DIR
         chown -R $ZK_USER:$ZK_USER $ZK_DATA_LOG_DIR
     fi
 
     if [ ! -d $ZK_LOG_DIR  ]; then
         mkdir -p $ZK_LOG_DIR
+        chmod -R 777 $ZK_LOG_DIR
         chown -R $ZK_USER:$ZK_USER $ZK_LOG_DIR
     fi
 
