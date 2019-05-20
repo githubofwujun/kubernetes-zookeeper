@@ -18,8 +18,10 @@ RUN set -x \
     && gpg --keyserver ha.pool.sks-keyservers.net --recv-key "$GPG_KEY" \
     && gpg --batch --verify "$ZK_DIST.tar.gz.asc" "$ZK_DIST.tar.gz" \
     && tar -xzf "$ZK_DIST.tar.gz" -C /opt \
+    && chmod -R 777 /opt/$ZK_DIST \
     && rm -r "$GNUPGHOME" "$ZK_DIST.tar.gz" "$ZK_DIST.tar.gz.asc" \
     && ln -s /opt/$ZK_DIST /opt/zookeeper \
+    && chmod -R 777 /opt/zookeeper \
     && rm -rf /opt/zookeeper/CHANGES.txt \
     /opt/zookeeper/README.txt \
     /opt/zookeeper/NOTICE.txt \
@@ -50,10 +52,11 @@ RUN set -x \
     && [ `id -u $ZK_USER` -eq 1000 ] \
     && [ `id -g $ZK_USER` -eq 1000 ] \
     && usermod -aG root $ZK_USER \
-    && chmod +x /opt/zookeeper/bin/*.sh \
+    && chmod -R 777 /opt/zookeeper/ \
     && mkdir -p $ZK_DATA_DIR $ZK_DATA_LOG_DIR $ZK_LOG_DIR /usr/share/zookeeper /tmp/zookeeper /usr/etc/ \
     && chown -R "$ZK_USER:$ZK_USER" /opt/$ZK_DIST $ZK_DATA_DIR $ZK_LOG_DIR $ZK_DATA_LOG_DIR /tmp/zookeeper \
+    && chmod -R 777 /opt/$ZK_DIST $ZK_DATA_DIR $ZK_LOG_DIR $ZK_DATA_LOG_DIR /tmp/zookeeper
     && ln -s /opt/zookeeper/conf/ /usr/etc/zookeeper \
     && ln -s /opt/zookeeper/bin/* /usr/bin \
     && ln -s /opt/zookeeper/$ZK_DIST.jar /usr/share/zookeeper/ \
-    && ln -s /opt/zookeeper/lib/* /usr/share/zookeeper
+    && ln -s /opt/zookeeper/lib/* /usr/share/zookeeper 
