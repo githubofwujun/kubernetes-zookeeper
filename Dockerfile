@@ -1,7 +1,6 @@
 FROM ubuntu:16.04
 
-ENV ZK_USER=root \
-    ZK_DATA_DIR=/var/lib/zookeeper/data \
+ENV ZK_DATA_DIR=/var/lib/zookeeper/data \
     ZK_DATA_LOG_DIR=/var/lib/zookeeper/log \
     ZK_LOG_DIR=/var/log/zookeeper \
     JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
@@ -38,7 +37,7 @@ RUN set -x \
     /opt/zookeeper/$ZK_DIST.jar.sha1 \
     && apt-get autoremove -y wget \
     && rm -rf /var/lib/apt/lists/* \
-    && iptables -nL
+    && which iptables
 
 # Copy configuration generator script to bin
 COPY zkGenConfig.sh zkOk.sh zkMetrics.sh /opt/zookeeper/bin/
