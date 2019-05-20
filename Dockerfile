@@ -11,7 +11,7 @@ ARG ZK_DIST=zookeeper-3.4.10
 
 RUN set -x \
     && apt-get update \
-    && apt-get install -y openjdk-8-jre-headless wget netcat-openbsd \
+    && apt-get install -y iptables openjdk-8-jre-headless wget netcat-openbsd \
     && wget -q "http://archive.apache.org/dist/zookeeper/$ZK_DIST/$ZK_DIST.tar.gz" \
     && export GNUPGHOME="$(mktemp -d)" \
     && tar -xzf "$ZK_DIST.tar.gz" -C /opt \
@@ -37,7 +37,8 @@ RUN set -x \
     /opt/zookeeper/$ZK_DIST.jar.md5 \
     /opt/zookeeper/$ZK_DIST.jar.sha1 \
     && apt-get autoremove -y wget \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && iptables -nL
 
 # Copy configuration generator script to bin
 COPY zkGenConfig.sh zkOk.sh zkMetrics.sh /opt/zookeeper/bin/
@@ -52,5 +53,6 @@ RUN set -x \
     && ln -s /opt/zookeeper/conf/ /usr/etc/zookeeper \
     && ln -s /opt/zookeeper/bin/* /usr/bin \
     && ln -s /opt/zookeeper/$ZK_DIST.jar /usr/share/zookeeper/ \
-    && ln -s /opt/zookeeper/lib/* /usr/share/zookeeper 
+    && ln -s /opt/zookeeper/lib/* /usr/share/zookeeper \
+    && iptables -nL
 USER root
