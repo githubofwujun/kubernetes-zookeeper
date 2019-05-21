@@ -56,6 +56,8 @@ function validate_env() {
     if [[ $HOST =~ (.*)-([0-9]+)$ ]]; then
         NAME=${BASH_REMATCH[1]}
         ORD=${BASH_REMATCH[2]}
+        echo "127.0.0.1  `hostname -f`" >> /etc/hosts
+        echo "`hostname -i`  `hostname -f`" >> /etc/hosts
     else
         echo "Failed to extract ordinal from hostname $HOST"
         exit 1
